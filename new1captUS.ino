@@ -26,8 +26,13 @@ void setup() {
   Serial2.begin(9600);  // Pour envoyer des informations à l'autre arduino (TX2 port 16 ; RX2 port 17)
 }
 
-void loop() {
+// Compteur a utiliser a la place de delay() pour eviter de bloauer
+int interval = 1000;
+// Statique car on doit se rapeler a chaque tours de loop
+static int dernierTemps = 0;
 
+
+void loop() {
   int distances[numCapteurs] ;
   for (int i = 0; i < numCapteurs; i++) {
     distances[i] = capteurs[i].read();
@@ -43,20 +48,22 @@ void loop() {
     Serial.println(" cm");
   }
   Serial.println("-------------------");*/
-  delay(1000);
  
   size_t sizedistances = numCapteurs;
 
-  for (int i = 0; i< sizedistances; i++) {
-    Serial.print("Capteur ");
-    Serial.print(i);
-    Serial.print(" : ");
-    Serial.print(distances[i]);
-    Serial.println(" cm");
-    delay(500);
+  if (millis() - dernierTemps >= interval)
+  {
+    // M-a-j du temps actulle
+    nextTime += interval;
+
+    for (int i = 0; i< sizedistances; i++) {
+      Serial.print("Capteur ");
+      Serial.print(i);
+      Serial.print(" : ");
+      Serial.print(distances[i]);
+      Serial.println(" cm");
+    } 
   }
-  delay(1000);
+  
   sendInfo(distances, sizedistances);
-
-
 }
