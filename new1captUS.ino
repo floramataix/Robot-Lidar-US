@@ -31,9 +31,9 @@ int interval = 1000;
 // Statique car on doit se rapeler a chaque tours de loop
 static int dernierTemps = 0;
 
+static int distances[numCapteurs];
 
 void loop() {
-  int distances[numCapteurs] ;
   for (int i = 0; i < numCapteurs; i++) {
     distances[i] = capteurs[i].read();
   }
