@@ -48,7 +48,6 @@ void setup() {
   BTSerial.begin(9600);  
   micro_servo.attach(7);  // Initialisation du servo
   Serial.println("Arduino avec HC-0x");
-  Serial.begin(9600);
   pixels.begin(); // initialise l'anneau de leds
   pixels.setBrightness(25);
 
