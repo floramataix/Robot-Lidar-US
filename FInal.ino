@@ -9,8 +9,8 @@
 
 // Définition des broches des capteurs
 const int numCapteurs = 8;  // Nombre de capteurs
-int triggerPins[numCapteurs] = {3,5,7,9,11,13,A3,A5};  // Broches Trigger
-int echoPins[numCapteurs] = {2,4,6,8,10,12,A2,A4};     // Broches Echo
+int triggerPins[numCapteurs] = {3,5,7,9,11,13,A5,A3};  // Broches Trigger
+int echoPins[numCapteurs] = {2,4,6,8,10,12,A4,A2};     // Broches Echo
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -48,6 +48,7 @@ void setup() {
   BTSerial.begin(9600);  
   micro_servo.attach(7);  // Initialisation du servo
   Serial.println("Arduino avec HC-0x");
+  Serial.begin(9600);
   pixels.begin(); // initialise l'anneau de leds
   pixels.setBrightness(25);
 
@@ -61,7 +62,7 @@ void sendInfo(int tab[], int size){
   }
   Serial2.print('\n');  // fin de paquet
   
-  delay(150);
+
 }
 
 void loop() {
@@ -111,7 +112,7 @@ void loop() {
   
     for(int i=0; i<8; i++){
       pixels.setBrightness(10);
-      if (distances[i]<100){
+      if (distances[i]<15){
         for(int j=0; j<4; j++){
           pixels.setPixelColor(i*4+j, pixels.Color(150, 0, 0)); //s'allume en rouge quand la distance est inféreieur à 1 m
         }
@@ -122,16 +123,25 @@ void loop() {
           pixels.setPixelColor(i*4+j, pixels.Color(0, 150, 0)); //s'allume en vert
         }
       }
+    }
+    if (distances[7]<15){
+      for (int i=32; i<36; i++){
+        pixels.setPixelColor(i, pixels.Color(150, 0, 0));
+      }
+    }
+    else{
+      for(int i=32; i<36; i++){
+        pixels.setPixelColor(i, pixels.Color(0, 150, 0)); //s'allume en vert
+      }
+    }
     
 
-      
-  }
+  
   pixels.show();
-  delay(10);
-  
-  delay(2500);
+
+
   Serial.println("===========");
-  
+  delay(1000);
 
 
   sendInfo(distances, numCapteurs);
