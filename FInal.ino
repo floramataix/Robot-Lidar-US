@@ -95,7 +95,25 @@ void loop() {
       receivedWord = "";
       while (BTSerial.available()) BTSerial.read();  // Vider le buffer Bluetooth
     }
-  
+
+    // Lire la distance de chaque capteur
+  positionsObstacle = "";
+  for (int i = 0; i < 8; i++) {
+
+    if (distances[i] < LIMITE_OBSTACLE) {
+      positionsObstacle += char('1');  
+    }
+    else{
+      positionsObstacle += char('0');
+    }
+  }
+
+  if (positionsObstacle.length() > 0) {
+    BTSerial.println(positionsObstacle); 
+  }
+
+  delay(scanDelay);  // Attente avant le prochain scan
+}
   }
   int distances[numCapteurs] ;
   for (int i = 0; i < numCapteurs; i++) {
